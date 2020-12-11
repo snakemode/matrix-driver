@@ -1,0 +1,27 @@
+<html>
+
+<head>
+    <title>LED Panel</title>
+    <script src="demo.js" type="module"></script>
+    <style>
+        .row {
+            display: flex;
+        }
+
+        .cell {
+            border: 1px solid white;
+        }
+        .cell:after {
+            content: "";
+            display: block;
+            padding-bottom: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>LED Matrix!</h1>
+    <div id="lightGrid"></div>
+</body>
+
+</html>
