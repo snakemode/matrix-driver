@@ -16,4 +16,8 @@ export class PixelProtocolTextSerializer implements IPixelProtocolSerializer<Set
 
         return asBinaryArray;
     }
+
+    public deserialize(bytes: Uint8Array): SetPixelsMessage {
+        throw new Error("Method not implemented.");
+    }
 }

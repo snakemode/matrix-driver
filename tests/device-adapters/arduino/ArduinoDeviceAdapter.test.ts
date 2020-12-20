@@ -18,7 +18,8 @@ describe("IotShirtMessageSerializer", () => {
         serializer = {
             serialize: (_): Uint8Array => {
                 return new Uint8Array([1, 2, 3]);
-            }
+            },
+            deserialize: (_) => { return null; }
         };
 
         sut = new ArduinoDeviceAdapter(transport, serializer);

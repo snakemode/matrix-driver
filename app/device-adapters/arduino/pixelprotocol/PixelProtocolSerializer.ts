@@ -28,7 +28,16 @@ export class PixelProtocolSerializer implements IPixelProtocolSerializer<ValidPr
         }
 
         if (binary[1] === AsciiControlCodes.P_PixelMode) {
-            const serializer = this._serializers.get("SetPixelsMessage") as SetPixelSerializer;
+            const serializer = this._serializers.get("SetPixelsMessage");
+            return serializer.deserialize(binary);
+        }
+
+        if (binary[1] === AsciiControlCodes.T_TextMode) {
+            const serializer = this._serializers.get("SetTextMessage");
+            return serializer.deserialize(binary);
+        }
+        if (binary[1] === AsciiControlCodes.C_ControlMessage) {
+            const serializer = this._serializers.get("ControlMessage");
             return serializer.deserialize(binary);
         }
 

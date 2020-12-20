@@ -1,4 +1,4 @@
-import { SetTextMessage } from "../../../messages/SetTextMessage";
+import { SetTextMessage, TextMode } from "../../../messages/SetTextMessage";
 import { AsciiControlCodes } from "./AsciiControlCodes";
 import { IPixelProtocolSerializer } from "./IPixelProtocolSerializer";
 
@@ -31,5 +31,26 @@ export class SetTextMessageSerializer implements IPixelProtocolSerializer<SetTex
         );
 
         return new Uint8Array(binaryCommands);
+    }
+
+    public deserialize(data: Uint8Array): SetTextMessage {
+
+        const bytes = [...data];
+        const textBytes = bytes.slice(8, bytes.length - 2);
+
+        let text = "";
+        for (let charCode of textBytes) {
+            text += String.fromCharCode(charCode);
+        }
+
+        const textMode = data[2] as TextMode;
+        const speed = data[3];
+        const color = {
+            r: data[4],
+            g: data[5],
+            b: data[6]
+        };
+
+        return new SetTextMessage(text, textMode, speed, color);
     }
 }
