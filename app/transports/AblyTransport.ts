@@ -3,11 +3,11 @@ import Ably from "ably";
 
 export class AblyTransport implements IMessageTransport {
 
-    private ably: Ably.Types.RealtimePromise;
+    private ably: any;
     private channelId: string;
     private channel: any;
 
-    constructor(ablyClient: Ably.Types.RealtimePromise, channelId = "leds") {
+    constructor(ablyClient: any, channelId = "leds") {
         this.ably = ablyClient;
         this.channelId = channelId;
         this.channel = this.ably.channels.get(this.channelId);
