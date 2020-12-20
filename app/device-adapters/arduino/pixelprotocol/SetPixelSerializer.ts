@@ -71,6 +71,65 @@ export class SetPixelSerializer implements IPixelProtocolSerializer<SetPixelsMes
         return new Uint8Array([...binaryCommands]);
     }
 
+    public deserialize(bytes: Uint8Array): SetPixelsMessage {
+
+        if (bytes[0] != AsciiControlCodes.DeviceControl1
+            && bytes[1] != AsciiControlCodes.P_PixelMode) {
+            throw new Error("Wrong message type for serializer.");
+        }
+
+        const pixels = [];
+
+        let inPixelBlock = false;
+        let r = 0;
+        let g = 0;
+        let b = 0;
+
+        for (let i = 0; i < bytes.length; i++) {
+            let current = bytes[i];
+
+            if (inPixelBlock) {
+                const x = current;
+                const y = bytes[++i];
+
+                const pixel = {
+                    x, y, color: { r, g, b }
+                };
+
+                pixels.push(pixel);
+
+                const next = bytes[i + 1];
+
+                if (next !== AsciiControlCodes.RS_RecordSeparator) {
+                    inPixelBlock = false;
+                } else {
+                    i++;
+                }
+
+                continue;
+            }
+
+            if (current == AsciiControlCodes.EOT_EndOfTransmission) {
+                break;
+            }
+
+            if (current == AsciiControlCodes.ETB_EndOfBlock) {
+                inPixelBlock = false;
+                continue;
+            }
+
+            if (current === AsciiControlCodes.STX_StartOfText) {
+                r = bytes[++i];
+                g = bytes[++i];
+                b = bytes[++i];
+                inPixelBlock = true;
+                continue;
+            }
+        }
+
+        return SetPixelsMessage.fromPixelValueCollection(pixels);
+    }
+
     private asDrawSequence(resolvedPixels: ResolvedPixelValue[]) {
 
         const grouped = groupBy(resolvedPixels, pixel => {

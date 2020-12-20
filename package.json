@@ -1,6 +1,6 @@
 {
   "name": "@snakemode/matrix-driver",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "A general purpose LED matrix driver / simulator sandbox",
   "main": "dist/app/index.js",
   "types": "dist/app/index.d.ts",

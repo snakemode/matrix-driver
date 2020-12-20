@@ -135,6 +135,50 @@ describe("SetPixelSerializer", () => {
         expect([...result]).toStrictEqual([0x11, 0x50, 0x02, 255, 255, 255, 0, 0, 0x03, 0x04]);
     });
 
+    it("deserialize, given a single pixel, returns SetPixelMessage with correct data", async () => {
+        const inputs: PixelValue[] = [
+            { x: 0, y: 1, color: "#FFFFFF" }
+        ];
+
+        const msg = SetPixelsMessage.fromPixelValueCollection(inputs);
+        const binary = sut.serialize(msg);
+        const result = sut.deserialize(binary);
+        const typedResult = result as SetPixelsMessage;
+
+        expect(typedResult.pixelValues[0]).toStrictEqual({
+            x: 0,
+            y: 1,
+            color: { r: 255, g: 255, b: 255 },
+            paletteRef: 0
+        });
+    });
+
+    it("deserialize, given a multiple pixel, returns SetPixelMessage with correct data", async () => {
+        const inputs: PixelValue[] = [
+            { x: 0, y: 1, color: "#FFFFFF" },
+            { x: 1, y: 0, color: "#FFFF00" },
+        ];
+
+        const msg = SetPixelsMessage.fromPixelValueCollection(inputs);
+        const binary = sut.serialize(msg);
+        const result = sut.deserialize(binary);
+        const typedResult = result as SetPixelsMessage;
+
+        expect(typedResult.pixelValues[0]).toStrictEqual({
+            x: 0,
+            y: 1,
+            color: { r: 255, g: 255, b: 255 },
+            paletteRef: 0
+        });
+
+        expect(typedResult.pixelValues[1]).toEqual({
+            x: 1,
+            y: 0,
+            color: { r: 255, g: 255, b: 0 },
+            paletteRef: 1
+        });
+    });
+
 });
 
 
