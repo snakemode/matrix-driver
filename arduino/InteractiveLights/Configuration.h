@@ -10,7 +10,7 @@ const char *mqtt_host = "mqtt.ably.io";
 const int mqtt_port = 8883;
 const char *mqtt_username = "first-part-of-ably-api-key";
 const char *mqtt_password = "second-part-of-ably-api-key";
-const char *ssl_thumbprint = "0e98bcfdccfade0103746da824162ae0e9c6bb4b"; // verify the in your browser
+const char *ssl_thumbprint = "cdbd9920909d5f69e5766ab0d120de33c243306e"; // verify the in your browser
 const char *mqtt_topic = "leds";
 
 // Display config
